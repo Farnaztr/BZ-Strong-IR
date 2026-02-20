@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ایران قوی - نسخه نمایشگاهی</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;400;900&display=swap');
+
+        :root {
+            --p-color: #bc13fe;
+            --s-color: #7b2ff7;
+            --bg: #05010d;
+            --gold: #ffd700;
+        }
+
+        body, html {
+            margin: 0; padding: 0;
+            width: 100%; height: 100vh;
+            background-color: var(--bg);
+            color: white;
+            font-family: 'Vazirmatn', sans-serif;
+            overflow: hidden; /* برای محیط نمایشگاهی که نباید اسکرول بخورد */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* ===== بکگراند فوق پویا ===== */
+        .bg-fixed {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background: radial-gradient(circle at 50% 50%, #1a0b35 0%, #05010d 100%);
+        }
+
+        .animated-blob {
+            position: absolute; width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(188, 19, 254, 0.15) 0%, transparent 70%);
+            border-radius: 50%; filter: blur(60px);
+            animation: move 20s infinite alternate;
+        }
+
+        @keyframes move {
+            from { transform: translate(-20%, -20%); }
+            to { transform: translate(20%, 20%); }
+        }
+
+        /* ===== کادر اصلی ریسپانسیو هوشمند ===== */
+        .poster-canvas {
+            width: 95vw; height: 92vh;
+            max-width: 1500px;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(188, 19, 254, 0.3);
+            border-radius: 40px;
+            display: flex; flex-direction: column;
+            padding: 2rem; box-sizing: border-box;
+            box-shadow: 0 0 100px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        .main-title {
+            text-align: center;
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 900;
+            margin: 0;
+            background: linear-gradient(to bottom, #fff, var(--p-color));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 15px rgba(188, 19, 254, 0.6));
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 1.5rem; flex-grow: 1; align-items: center;
+        }
+
+        /* کارت‌ها */
+        .info-card {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 20px; padding: 1.5rem;
+            border-right: 4px solid var(--p-color);
+            transition: 0.4s ease;
+        }
+        .info-card:hover { transform: translateX(-10px); background: rgba(188, 19, 254, 0.1); }
+        .info-card h2 { color: var(--p-color); margin-top: 0; font-size: 1.4rem; }
+        .info-card p { font-size: 1rem; line-height: 1.8; opacity: 0.85; text-align: justify; }
+
+        /* موبایل‌ها - فیکس کردن ابعاد برای دیده شدن عکس‌ها */
+        .mockups-container {
+            display: flex; justify-content: center; align-items: center; gap: 1rem;
+            perspective: 1000px;
+        }
+
+        .phone-mock {
+            width: 200px; height: 420px; /* ابعاد استاندارد و بزرگ */
+            background: #000; border: 6px solid #1a1a1a;
+            border-radius: 30px; position: relative;
+            transition: 0.6s cubic-bezier(0.2, 1, 0.3, 1);
+            overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            cursor: pointer;
+        }
+
+        .phone-mock.large { width: 240px; height: 480px; z-index: 2; border-color: #222; }
+
+        .phone-mock:hover {
+            transform: translateY(-20px) rotateY(-10deg);
+            border-color: var(--p-color);
+            box-shadow: 0 0 40px rgba(188, 19, 254, 0.5);
+        }
+
+        /* اسکنر نئونی */
+        .phone-mock::before {
+            content: ''; position: absolute; top: -100%; left: 0; width: 100%; height: 40%;
+            background: linear-gradient(to bottom, transparent, rgba(188, 19, 254, 0.4), transparent);
+            animation: scan 4s infinite linear; z-index: 2; pointer-events: none;
+        }
+        @keyframes scan { 0% { top: -100%; } 100% { top: 200%; } }
+
+        .qr-placeholder {
+            width: 120px; height: 120px; background: white; margin: 1rem auto;
+            padding: 10px; border-radius: 15px; box-shadow: 0 0 20px var(--p-color);
+        }
+
+        /* فوتر */
+        .footer {
+            display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;
+        }
+
+        .video-btn {
+            background: var(--p-color); color: white; border: none;
+            padding: 12px 25px; border-radius: 50px; font-weight: 900;
+            cursor: pointer; transition: 0.3s; box-shadow: 0 0 20px var(--p-color);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+
+        /* ویدیوی تمام صفحه */
+        .video-overlay {
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95);
+            z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(10px);
+        }
+        .video-box { width: 80%; max-width: 1000px; border: 2px solid var(--p-color); border-radius: 20px; overflow: hidden; position: relative; }
+        .close-btn { position: absolute; top: 10px; left: 10px; background: red; color: white; border: none; padding: 10px; cursor: pointer; border-radius: 5px; z-index: 1001; }
+
+    </style>
+</head>
+<body>
+
+    <div class="bg-fixed">
+        <div class="animated-blob" style="top: 10%; left: 10%;"></div>
+        <div class="animated-blob" style="bottom: 10%; right: 10%; animation-delay: -5s;"></div>
+    </div>
+
+    <div class="video-overlay" id="videoOverlay" onclick="closeVideo()">
+        <div class="video-box" onclick="event.stopPropagation()">
+            <button class="close-btn" onclick="closeVideo()">بستن ✕</button>
+            <video id="appVideo" width="100%" controls>
+                <source src="video.mp4" type="video/mp4">
+            </video>
+        </div>
+    </div>
+
+    <div class="poster-canvas">
+        <header>
+            <h1 class="main-title">ایـران قــوی</h1>
+            <p style="text-align: center; letter-spacing: 5px; opacity: 0.7; margin-top: -10px;">دستاورد بومی | شکوه جهانی</p>
+        </header>
+
+        <div class="content-grid">
+            <div class="side">
+                <div class="info-card">
+                    <h2>دستاوردها</h2>
+                    <p>معرفی قدرت موشکی، نانو فناوری و تاریخ باستان ایران زمین.</p>
+                </div>
+                <br>
+                <div class="info-card">
+                    <h2>تایید محتوا</h2>
+                    <p>اطلاعات وارد شده پس از تایید توسط ناظر در اپلیکیشن نمایش داده می‌شود.</p>
+                </div>
+            </div>
+
+            <div class="mockups-container">
+                <div class="phone-mock" onclick="openVideo()">
+                    <img src="1.png" style="width:100%; height:100%; object-fit:cover;">
+                </div>
+                <div class="phone-mock large" onclick="openVideo()">
+                    <img src="2.png" style="width:100%; height:100%; object-fit:cover;">
+                </div>
+                <div class="phone-mock" onclick="openVideo()">
+                    <img src="5.png" style="width:100%; height:100%; object-fit:cover;">
+                </div>
+            </div>
+
+            <div class="side">
+                <div class="info-card" style="border-right:none; border-left:4px solid var(--p-color);">
+                    <h2>ویژگی‌ها</h2>
+                    <p>• حالت شب و روز<br>• لینک مستقیم به منابع<br>• ثبت گزارشات مردمی</p>
+                </div>
+                <div class="qr-placeholder">
+                    <img src="my-qr.png" style="width:100%; height:100%; object-fit:contain;">
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div style="background: var(--p-color); padding: 5px 20px; border-radius: 20px; font-weight: bold;">نمایشگاه ۱۴۰۴</div>
+            <button class="video-btn" onclick="openVideo()">پخش ویدیو معرفی ▶</button>
+        </div>
+    </div>
+
+    <script>
+        function openVideo() {
+            document.getElementById('videoOverlay').style.display = 'flex';
+            document.getElementById('appVideo').play();
+        }
+        function closeVideo() {
+            document.getElementById('videoOverlay').style.display = 'none';
+            document.getElementById('appVideo').pause();
+        }
+    </script>
+    
+</body>
+</html>
