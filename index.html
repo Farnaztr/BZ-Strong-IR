@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ایران قوی | عمق کهکشان</title>
+    <title>ایران قوی </title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;400;700;900&display=swap');
@@ -439,6 +439,94 @@
             .phone-showcase { flex-wrap: wrap; }
             .footer { flex-direction: column; gap: 20px; }
         }
+
+  @media screen and (max-width: 768px) {
+    .ui-layer {
+        padding: 20px 15px;
+        overflow-y: auto;
+        justify-content: flex-start;
+        gap: 20px;
+    }
+
+    .main-title {
+        font-size: 3.5rem;
+        margin-top: 20px;
+    }
+
+    .content-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        width: 100%;
+    }
+
+    .phone-showcase {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin: 10px 0;
+    }
+
+    .phone-frame {
+        width: 140px;
+        height: 280px;
+    }
+
+    .phone-frame.large {
+        width: 160px;
+        height: 320px;
+    }
+
+    .hud-panel {
+        padding: 15px;
+        margin: 10px 0;
+    }
+
+    .footer {
+        flex-direction: column;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .qr-block {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .btn-video {
+        width: 100%;
+        padding: 15px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .main-title {
+        font-size: 2.5rem;
+    }
+
+    .phone-frame {
+        width: 120px;
+        height: 240px;
+    }
+
+    .phone-frame.large {
+        width: 140px;
+        height: 280px;
+    }
+
+    .hud-panel h3 {
+        font-size: 1rem;
+    }
+
+    .hud-panel p {
+        font-size: 0.8rem;
+    }
+
+    .qr-block img {
+        width: 60px;
+        height: 60px;
+    }
+}
     </style>
 </head>
 <body>
